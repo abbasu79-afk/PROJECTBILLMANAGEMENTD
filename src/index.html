@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Bill Generator</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #eee;
+      }
+      .header h1 {
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+      .header p {
+        color: #7f8c8d;
+        margin-top: 0;
+      }
+      .bill-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+      .bill-info div {
+        width: 48%;
+      }
+      .bill-info h3 {
+        margin-top: 0;
+        color: #2c3e50;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+        font-weight: 600;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      .total-row {
+        font-weight: bold;
+        background-color: #e8f4f8;
+      }
+      .amount-in-words {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 20px;
+        border-left: 4px solid #3498db;
+      }
+      .signature-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+      }
+      .signature-box {
+        width: 200px;
+        text-align: center;
+      }
+      .signature-line {
+        border-top: 1px solid #333;
+        margin-top: 60px;
+        padding-top: 10px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .btn {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      .btn:hover {
+        background-color: #2980b9;
+      }
+      .btn-print {
+        background-color: #27ae60;
+      }
+      .btn-print:hover {
+        background-color: #219955;
+      }
+      .no-print {
+        margin-top: 30px;
+      }
+      @media print {
+        .no-print {
+          display: none;
+        }
+        body {
+          background-color: white;
+          padding: 0;
+        }
+        .container {
+          box-shadow: none;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>PROJECT BILL</h1>
+        <p>Project Bill Management System</p>
+      </div>
+
+      <div class="bill-info">
+        <div>
+          <h3>Bill Information</h3>
+          <div class="form-group">
+            <label>Bill Number</label>
+            <input
+              type="text"
+              id="bill-no"
+              class="form-control"
+              value="PB-2023-001"
+            />
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="bill-date" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <h3>Party Information</h3>
+          <div class="form-group">
+            <label>Party Name</label>
+            <input
+              type="text"
+              id="party-name"
+              class="form-control"
+              value="ABC Construction Ltd."
+            />
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <input
+              type="text"
+              id="party-address"
+              class="form-control"
+              value="123 Business Park, City"
+            />
+          </div>
+        </div>
+      </div>
+
+      <table id="items-table">
+        <thead>
+          <tr>
+            <th width="5%">SL No.</th>
+            <th width="45%">Description</th>
+            <th width="10%">Qty</th>
+            <th width="10%">Unit</th>
+            <th width="15%">Rate</th>
+            <th width="15%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Construction Material - Cement</td>
+            <td>100</td>
+            <td>Bags</td>
+            <td>500.00</td>
+            <td>50,000.00</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Steel Rods</td>
+            <td>200</td>
+            <td>Pcs</td>
+            <td>250.00</td>
+            <td>50,000.00</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Labor Charges</td>
+            <td>1</td>
+            <td>Lot</td>
+            <td>25,000.00</td>
+            <td>25,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display: flex; justify-content: space-between">
+        <div style="width: 48%">
+          <table>
+            <tr>
+              <th>Additional Charges</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>DF VAT</td>
+              <td>2,500.00</td>
+            </tr>
+            <tr>
+              <td>Custom Assessment</td>
+              <td>1,250.00</td>
+            </tr>
+            <tr>
+              <td>Shipping Agent Cost</td>
+              <td>3,000.00</td>
+            </tr>
+            <tr>
+              <td>Depot Cost</td>
+              <td>750.00</td>
+            </tr>
+            <tr>
+              <td>Stamp Cost</td>
+              <td>500.00</td>
+            </tr>
+            <tr>
+              <td>Scanning Officer Cost</td>
+              <td>1,000.00</td>
+            </tr>
+            <tr class="total-row">
+              <td>Total Amount</td>
+              <td>134,000.00</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="amount-in-words">
+        <strong>Amount in Words:</strong>
+        <span id="amount-words"
+          >One hundred thirty-four thousand dollars only</span
+        >
+      </div>
+
+      <div class="signature-section">
+        <div class="signature-box">
+          <p>Prepared By</p>
+          <div class="signature-line"></div>
+        </div>
+        <div class="signature-box">
+          <p>Authorized Signature</p>
+          <div class="signature-line"></div>
+        </div>
+      </div>
+
+      <div class="no-print">
+        <button class="btn btn-print" onclick="window.print()">
+          Print Bill
+        </button>
+        <button class="btn" onclick="calculateTotal()">Calculate Total</button>
+      </div>
+    </div>
+
+    <script>
+      // Set today's date as default
+      document.getElementById("bill-date").valueAsDate = new Date();
+
+      // Function to convert numbers to words
+      function numberToWords(num) {
+        const ones = [
+          "",
+          "one",
+          "two",
+          "three",
+          "four",
+          "five",
+          "six",
+          "seven",
+          "eight",
+          "nine",
+        ];
+        const teens = [
+          "ten",
+          "eleven",
+          "twelve",
+          "thirteen",
+          "fourteen",
+          "fifteen",
+          "sixteen",
+          "seventeen",
+          "eighteen",
+          "nineteen",
+        ];
+        const tens = [
+          "",
+          "ten",
+          "twenty",
+          "thirty",
+          "forty",
+          "fifty",
+          "sixty",
+          "seventy",
+          "eighty",
+          "ninety",
+        ];
+        const scales = ["", "thousand", "million", "billion", "trillion"];
+
+        num = parseFloat(num) || 0;
+        if (num === 0) return "Zero dollars";
+
+        // Split into dollars and cents
+        const dollars = Math.floor(num);
+        const cents = Math.round((num - dollars) * 100);
+
+        let words = "";
+
+        if (dollars > 0) {
+          let count = 0;
+          let remaining = dollars;
+
+          while (remaining > 0) {
+            const chunk = remaining % 1000;
+            remaining = Math.floor(remaining / 1000);
+
+            if (chunk !== 0) {
+              let chunkWords = convertChunk(chunk);
+              if (scales[count]) {
+                chunkWords += " " + scales[count];
+              }
+              words = chunkWords + " " + words;
+            }
+
+            count++;
+          }
+
+          words = words.trim() + " dollar" + (dollars !== 1 ? "s" : "");
+        }
+
+        if (cents > 0) {
+          if (words !== "") words += " and ";
+          words += convertChunk(cents) + " cent" + (cents !== 1 ? "s" : "");
+        }
+
+        // Capitalize first letter
+        return words.charAt(0).toUpperCase() + words.slice(1);
+
+        function convertChunk(n) {
+          if (n === 0) return "";
+          if (n < 10) return ones[n];
+          if (n < 20) return teens[n - 10];
+
+          const ten = Math.floor(n / 10);
+          const one = n % 10;
+
+          return tens[ten] + (one ? "-" + ones[one] : "");
+        }
+      }
+
+      // Calculate total amount
+      function calculateTotal() {
+        // In a real implementation, you would calculate the total from the items
+        const totalAmount = 134000.0;
+        document.getElementById("amount-words").textContent =
+          numberToWords(totalAmount);
+        alert("Total calculated and amount in words updated!");
+      }
+
+      // Initialize the amount in words on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        calculateTotal();
+      });
+    </script>
+  </body>
+</html>
